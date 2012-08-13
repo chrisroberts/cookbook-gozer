@@ -1,0 +1,27 @@
+call pathogen#infect()
+syntax on
+filetype plugin indent on
+
+set ff=unix
+set autoindent
+set cmdheight=2
+set backspace=indent,eol,start
+set hlsearch
+set incsearch
+set ignorecase
+set textwidth=0
+set autoread
+set ruler
+set nu
+set showmatch
+set shiftwidth=2
+set tabstop=2
+set expandtab
+set t_Co=256
+set pastetoggle=<F2>
+let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+colorscheme solarized
+
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
