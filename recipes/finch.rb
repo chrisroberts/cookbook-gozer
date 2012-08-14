@@ -39,7 +39,7 @@ if(skype_config)
   end
 end
 
-purple_config = Gozer.bag('gozer', 'purple', node[:gozer][:bag_secret]
+purple_config = Gozer.bag('gozer', 'purple', node[:gozer][:bag_secret])
 
 if(purple_config)
   directory "/home/#{node[:gozer][:username]}/.purple" do
