@@ -3,7 +3,7 @@ module Gozer
 
     def bag_secret(secret)
       if(File.exists?(secret))
-        Chef::EncryptedDataBatItem.load_secret(secret)
+        Chef::EncryptedDataBagItem.load_secret(secret)
       else
         secret
       end
@@ -18,7 +18,7 @@ module Gozer
         end
       rescue => e
         Chef::Log.info "Failed to retreive item: #{item_name} from data bag: #{bag_name}"
-        Chef::Log.debug "#{e.class}: #{e}\n#{e.backtrace.join("\n")}"
+        raise e
       end
     end
   end
