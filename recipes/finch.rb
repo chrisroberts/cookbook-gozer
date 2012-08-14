@@ -58,6 +58,7 @@ if(purple_config)
 end
 
 package 'libpurple-dev'
+package 'git'
 
 execute "campfire-libpurple[fetch]" do
   command "git clone git://github.com/jrfoell/campfire-libpurple.git /opt/custom_packages/campfire-libpurple"
