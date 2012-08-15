@@ -76,6 +76,6 @@ end
     action :create
     owner node[:gozer][:username]
     group node[:gozer][:username]
-    mode 0644
+    mode 0755
   end
 end
