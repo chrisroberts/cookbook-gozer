@@ -79,3 +79,10 @@ end
     mode 0755
   end
 end
+
+cookbook_file "/home/#{node[:gozer][:username]}/.config/Terminal/terminalrc" do
+  source 'terminalrc'
+  mode 0644
+  owner node[:gozer][:username]
+  group node[:gozer][:username]
+end
