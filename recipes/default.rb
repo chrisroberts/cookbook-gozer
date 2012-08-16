@@ -3,7 +3,7 @@
   home
   packages
   system
-  xmonad
+  i3
   vim
   irssi
   finch
