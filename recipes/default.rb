@@ -3,7 +3,6 @@
   home
   packages
   system
-  i3
   vim
   irssi
   finch
@@ -17,3 +16,7 @@ end
 user 'ubuntu' do
   action :lock
 end
+
+node.set_unless[:i3][:home] = "/home/#{node[:gozer][:username]}"
+node.set_unless[:i3][:user] = node[:gozer][:username]
+include_recipe 'i3'
