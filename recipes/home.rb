@@ -94,14 +94,33 @@ directory "/home/#{node[:gozer][:username]}/Projects" do
 end
 
 node[:gozer][:projects][:git].each do |k,v|
+  if(v && File.dirname(v) != '.')
+    File.dirname(v).split('/').inject("/home/#{node[:gozer][:username]}/Projects") do |memo, obj|
+      memo << "/#{obj}"
+      directory memo do
+        action :create
+        mode 0755
+        owner node[:gozer][:username]
+        group node[:gozer][:username]
+      end
+      memo
+    end
+  end
   execute "clone #{k}" do
-    command "git clone #{k} #{v}"
+    command "git clone #{k} #{File.join("/home/#{node[:gozer][:username]}/Projects", v) if v}"
     cwd "/home/#{node[:gozer][:username]}/Projects"
-    owner node[:gozer][:username]
+    user node[:gozer][:username]
     group node[:gozer][:username]
     not_if do
       p_dir = v || File.basename(k).sub('.git', '')
       File.directory?("/home/#{node[:gozer][:username]}/Projects/#{p_dir}")
     end
   end
+end
+
+file "/home/#{node[:gozer][:username]}/.xsession" do
+  owner node[:gozer][:username]
+  group node[:gozer][:username]
+  mode 0700
+  content "#!/bin/bash\n$HOME/bin/caps_to_esc.sh\n"
 end
