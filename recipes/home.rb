@@ -86,3 +86,22 @@ cookbook_file "/home/#{node[:gozer][:username]}/.config/Terminal/terminalrc" do
   owner node[:gozer][:username]
   group node[:gozer][:username]
 end
+
+directory "/home/#{node[:gozer][:username]}/Projects" do
+  action :create
+  owner node[:gozer][:username]
+  group node[:gozer][:username]
+end
+
+node[:gozer][:projects][:git].each do |k,v|
+  execute "clone #{k}" do
+    command "git clone #{k} #{v}"
+    cwd "/home/#{node[:gozer][:username]}/Projects"
+    owner node[:gozer][:username]
+    group node[:gozer][:username]
+    not_if do
+      p_dir = v || File.basename(k).sub('.git', '')
+      File.directory?("/home/#{node[:gozer][:username]}/Projects/#{p_dir}")
+    end
+  end
+end
