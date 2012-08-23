@@ -111,3 +111,10 @@ export PATH=$PATH:/usr/local/rvm/bin # Add RVM to PATH for scripting
 if [ -f /usr/local/rvm/bin/rvm ]; then
   rvm use 1.9.3
 fi
+
+function gpa {
+  for remote in $(git remote -v | grep push | cut -f 1 -); do
+    echo "-----> Pushing to $remote: $*"
+    git push $remote $* 
+  done
+}
