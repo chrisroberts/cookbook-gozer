@@ -12,3 +12,5 @@ fi
 mkdir -p /mnt/backup/gozer_backup
 
 rsync -avzR --delete <%= @home_path %> /mnt/backup/gozer_backup
+
+umount /mnt/backup
