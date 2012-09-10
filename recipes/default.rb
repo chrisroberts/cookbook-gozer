@@ -3,6 +3,7 @@
   home
   packages
   system
+  git
   vim
   irssi
   finch

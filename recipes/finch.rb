@@ -1,3 +1,5 @@
+include_recipe 'gozer::git'
+
 package 'pidgin'
 
 directory '/opt/custom_packages' do
@@ -58,7 +60,6 @@ if(purple_config)
 end
 
 package 'libpurple-dev'
-package 'git'
 
 execute "campfire-libpurple[fetch]" do
   command "git clone git://github.com/jrfoell/campfire-libpurple.git /opt/custom_packages/campfire-libpurple"

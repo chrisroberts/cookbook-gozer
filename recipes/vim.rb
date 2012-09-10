@@ -1,3 +1,4 @@
+include_recipe 'gozer::git'
 package 'vim'
 
 cookbook_file "/home/#{node[:gozer][:username]}/.vimrc" do
@@ -6,8 +7,6 @@ cookbook_file "/home/#{node[:gozer][:username]}/.vimrc" do
   owner node[:gozer][:username]
   group node[:gozer][:username]
 end
-
-package 'git'
 
 %w(.vim .vim/bundle .vim/autoload).each do |dir|
   directory "/home/#{node[:gozer][:username]}/#{dir}" do

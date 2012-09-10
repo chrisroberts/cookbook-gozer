@@ -1,6 +1,6 @@
 require 'open-uri'
 
-package 'git'
+include_recipe 'gozer::git'
 
 directory "/home/#{node[:gozer][:username]}/Projects" do
   action :create

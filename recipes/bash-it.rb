@@ -1,4 +1,4 @@
-package 'git'
+include_recipe 'gozer::git'
 
 execute 'bash-it[install]' do
   command "git clone git://github.com/revans/bash-it.git /home/#{node[:gozer][:username]}/.bash_it"
