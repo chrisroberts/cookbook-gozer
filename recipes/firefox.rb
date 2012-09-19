@@ -29,7 +29,7 @@ node[:gozer][:firefox][:addons].each do |name, location|
         ids.each do |id|
           ext_path = File.join(node[:gozer][:firefox][:extension_dir], id)
           Dir.mkdir(ext_path)
-          raise 'Failed to unzip' unless system("unzip #{name.xpi} -d #{ext_path}")
+          raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{ext_path}")
         end
       ensure
         FileUtils.remove_entry_secure(tmp_dir)
