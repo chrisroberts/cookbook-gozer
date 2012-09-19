@@ -21,7 +21,7 @@ node[:gozer][:firefox][:addons].each do |name, location|
         o_dir = Dir.pwd
         hold_dir = File.join(tmp_dir, 'holder')
         Dir.mkdir(File.join(tmp_dir, 'holder'))
-        File.copy(xpi_path, File.join(tmp_dir, "#{name}.xpi"))
+        FileUtils.copy(xpi_path, File.join(tmp_dir, "#{name}.xpi"))
         Dir.chdir(tmp_dir)
         raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{hold_dir}")
         doc = REXML::Document.new(File.new(File.join(hold_dir, 'install.rdf')))
