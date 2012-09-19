@@ -10,6 +10,7 @@
   cone
   bash-it
   rvm
+  firefox
 ).each do |recipe_name|
   include_recipe "gozer::#{recipe_name}"
 end
