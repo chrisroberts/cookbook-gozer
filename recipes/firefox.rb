@@ -16,9 +16,9 @@ node[:gozer][:firefox][:addons].each do |name, location|
 
   ruby_block "firefox addon #{name} notifier" do
     block do
+      o_dir = Dir.pwd
       tmp_dir = Dir.mktmpdir
       begin
-        o_dir = Dir.pwd
         hold_dir = File.join(tmp_dir, 'holder')
         Dir.mkdir(File.join(tmp_dir, 'holder'))
         FileUtils.copy(xpi_path, File.join(tmp_dir, "#{name}.xpi"))
@@ -32,6 +32,7 @@ node[:gozer][:firefox][:addons].each do |name, location|
           raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{ext_path}")
         end
       ensure
+        Dir.chdir(o_dir)
         FileUtils.remove_entry_secure(tmp_dir)
       end
       Chef::Log.info "Firefox addon *#{name}* installed!"
