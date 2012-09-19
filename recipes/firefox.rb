@@ -37,6 +37,6 @@ node[:gozer][:firefox][:addons].each do |name, location|
       Chef::Log.info "Firefox addon *#{name}* installed!"
     end
     action :nothing
-    subscribes :create, resources(:remote_file => File.join(node[:gozer][:firefox][:extension_dir], "#{name}.xpi")), :immediately
+    subscribes :create, resources(:remote_file => xpi_path), :immediately
   end
 end
