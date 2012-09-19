@@ -20,16 +20,16 @@ node[:gozer][:firefox][:addons].each do |name, location|
       tmp_dir = Dir.mktmpdir
       begin
         hold_dir = File.join(tmp_dir, 'holder')
-        Dir.mkdir(File.join(tmp_dir, 'holder'))
+        Dir.mkdir(hold_dir)
         FileUtils.copy(xpi_path, File.join(tmp_dir, "#{name}.xpi"))
         Dir.chdir(tmp_dir)
-        raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{hold_dir}")
+        raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{hold_dir} 2>1 > /dev/null")
         doc = REXML::Document.new(File.new(File.join(hold_dir, 'install.rdf')))
         id = doc.elements.collect('RDF/Description/em:id'){|i|i.text}.first
         if(id)
           ext_path = File.join(node[:gozer][:firefox][:extension_dir], id)
           Dir.mkdir(ext_path)
-          raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{ext_path}")
+          raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{ext_path} 2>1 > /dev/null")
         else
           raise "Failed to determine extension ID for installation: #{name}"
         end
