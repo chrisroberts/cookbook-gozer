@@ -11,3 +11,10 @@ default[:gozer][:vim][:bundles] = %w(
   git://github.com/elixir-lang/vim-elixir.git
 )
 default[:gozer][:backup][:uuid] = nil
+default[:gozer][:firefox][:extension_dir] = '/usr/lib/firefox-addons/extensions'
+default[:gozer][:firefox][:addons] = {
+  :ghostery => 'https://addons.mozilla.org/firefox/downloads/latest/9609/addon-9609-latest.xpi?src=hp-dl-featured',
+  :adblock => 'https://addons.mozilla.org/firefox/downloads/latest/1865/addon-1865-latest.xpi?src=ss',
+  :flashblock => 'https://addons.mozilla.org/firefox/downloads/latest/433/addon-433-latest.xpi?src=search',
+  :noscript => 'https://addons.mozilla.org/en-US/firefox/addon/noscript/?src=search'
+}
