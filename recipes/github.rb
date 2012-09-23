@@ -26,20 +26,19 @@ directory "/home/#{node[:gozer][:username]}/Projects" do
 end
 
 node[:gozer][:projects][:git].each do |k,v|
-  if(v && File.dirname(v) != '.')
-    File.dirname(v).split('/').inject("/home/#{node[:gozer][:username]}/Projects") do |memo, obj|
-      memo << "/#{obj}"
-      directory memo do
-        action :create
-        mode 0755
-        owner node[:gozer][:username]
-        group node[:gozer][:username]
-      end
-      memo
+  File.dirname(v).split('/').inject("/home/#{node[:gozer][:username]}/Projects") do |memo, obj|
+    memo << "/#{obj}"
+    directory memo do
+      action :create
+      mode 0755
+      owner node[:gozer][:username]
+      group node[:gozer][:username]
     end
+    memo
   end
+  name = File.join(v, File.basename(k)).sub('.git', '')
   execute "clone #{k}" do
-    command "git clone #{k} #{File.join("/home/#{node[:gozer][:username]}/Projects", v) if v}"
+    command "git clone #{k} #{File.join("/home/#{node[:gozer][:username]}/Projects", name)}"
     cwd "/home/#{node[:gozer][:username]}/Projects"
     user node[:gozer][:username]
     group node[:gozer][:username]
