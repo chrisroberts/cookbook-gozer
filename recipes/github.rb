@@ -25,29 +25,27 @@ directory "/home/#{node[:gozer][:username]}/Projects" do
   group node[:gozer][:username]
 end
 
-node[:gozer][:github].each do |k,v|
-  node[:gozer][:projects][:git].each do |k,v|
-    if(v && File.dirname(v) != '.')
-      File.dirname(v).split('/').inject("/home/#{node[:gozer][:username]}/Projects") do |memo, obj|
-        memo << "/#{obj}"
-        directory memo do
-          action :create
-          mode 0755
-          owner node[:gozer][:username]
-          group node[:gozer][:username]
-        end
-        memo
+node[:gozer][:projects][:git].each do |k,v|
+  if(v && File.dirname(v) != '.')
+    File.dirname(v).split('/').inject("/home/#{node[:gozer][:username]}/Projects") do |memo, obj|
+      memo << "/#{obj}"
+      directory memo do
+        action :create
+        mode 0755
+        owner node[:gozer][:username]
+        group node[:gozer][:username]
       end
+      memo
     end
-    execute "clone #{k}" do
-      command "git clone #{k} #{File.join("/home/#{node[:gozer][:username]}/Projects", v) if v}"
-      cwd "/home/#{node[:gozer][:username]}/Projects"
-      user node[:gozer][:username]
-      group node[:gozer][:username]
-      not_if do
-        p_dir = v || File.basename(k).sub('.git', '')
-        File.directory?("/home/#{node[:gozer][:username]}/Projects/#{p_dir}")
-      end
+  end
+  execute "clone #{k}" do
+    command "git clone #{k} #{File.join("/home/#{node[:gozer][:username]}/Projects", v) if v}"
+    cwd "/home/#{node[:gozer][:username]}/Projects"
+    user node[:gozer][:username]
+    group node[:gozer][:username]
+    not_if do
+      p_dir = v || File.basename(k).sub('.git', '')
+      File.directory?("/home/#{node[:gozer][:username]}/Projects/#{p_dir}")
     end
   end
 end
