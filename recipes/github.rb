@@ -64,7 +64,7 @@ node[:gozer][:github][:accounts].each do |acct|
     next if node[:gozer][:github][:exclude][acct] && node[:gozer][:github][:exclude][acct].include?(repo_name)
     next if !node[:gozer][:github][:allow_forks][acct] && repo_info['fork']
     execute "clone #{repo_info['full_name']}" do
-      command "git clone #{repo_info['ssh_url']} #{File.join(base_path, repo_name)} 2>1 > /dev/null"
+      command "git clone #{repo_info['ssh_url']} #{File.join(base_path, repo_name)} > /dev/null"
       user node[:gozer][:username]
       group node[:gozer][:username]
       creates File.join(base_path, repo_name, '.git')
