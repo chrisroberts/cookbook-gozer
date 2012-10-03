@@ -7,18 +7,22 @@
   package pkg_name
 end
 
+ohai 'ruby' do
+  action :nothing
+end
+
 execute 'rvm[install]' do
   command 'curl -L https://get.rvm.io | sudo bash -s stable'
   creates "/usr/local/rvm"
   cwd "/home/#{node[:gozer][:username]}"
   user node[:gozer][:username]
   group 'nopass'
+  notifies :reload, resources(:ohai => 'ruby'), :immediately
 end
 
 group 'rvm' do
   members Array(node[:gozer][:username])
 end
-
 
 execute 'rvm[ruby-1.9.3]' do
   command '/usr/local/rvm/bin/rvm install 1.9.3'
@@ -27,4 +31,8 @@ execute 'rvm[ruby-1.9.3]' do
   not_if do
     system('/usr/local/rvm/bin/rvm list | grep ruby-1.9.3 > /dev/null')
   end
+end
+
+node[:gozer][:rvm][:gems].each do |gem_name|
+  gem_package gem_name
 end
