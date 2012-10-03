@@ -51,6 +51,7 @@ end
 
 node[:gozer][:github][:accounts].each do |acct|
   base_path = File.join("/home/#{node[:gozer][:username]}/Projects", acct)
+  page = 1
 
   directory base_path do
     owner node[:gozer][:username]
@@ -58,15 +59,18 @@ node[:gozer][:github][:accounts].each do |acct|
   end
 
   # NOTE: SSL cert fails for github using embedded (omnibus)  
-  JSON.parse(open("https://api.github.com/users/#{acct}/repos", :ssl_verify_mode => 0).read).each do |repo_info|
-    repo_name = repo_info['full_name'].split('/').last
-    next if node[:gozer][:github][:exclude][acct] && node[:gozer][:github][:exclude][acct].include?(repo_name)
-    next if !node[:gozer][:github][:allow_forks][acct] && repo_info['fork']
-    execute "clone #{repo_info['full_name']}" do
-      command "git clone #{repo_info['ssh_url']} #{File.join(base_path, repo_name)} > /dev/null"
-      user node[:gozer][:username]
-      group node[:gozer][:username]
-      creates File.join(base_path, repo_name, '.git')
+  until((repos = JSON.parse(open("https://api.github.com/users/#{acct}/repos?page=#{page}", :ssl_verify_mode => 0).read)).empty?)
+    repos.each do |repo_info|
+      repo_name = repo_info['full_name'].split('/').last
+      next if node[:gozer][:github][:exclude][acct] && node[:gozer][:github][:exclude][acct].include?(repo_name)
+      next if !node[:gozer][:github][:allow_forks][acct] && repo_info['fork']
+      execute "clone #{repo_info['full_name']}" do
+        command "git clone #{repo_info['ssh_url']} #{File.join(base_path, repo_name)} > /dev/null"
+        user node[:gozer][:username]
+        group node[:gozer][:username]
+        creates File.join(base_path, repo_name, '.git')
+      end
     end
+    page += 1
   end
 end
