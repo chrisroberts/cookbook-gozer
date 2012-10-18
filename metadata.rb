@@ -5,6 +5,8 @@ description      "Build my workstation"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.0.2"
 
+supports 'ubuntu' # but really, we are building off xubuntu
+
 depends 'i3'
 depends 'ohai'
 depends 'apt'
