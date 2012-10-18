@@ -13,7 +13,7 @@ end
 
 execute 'rvm[install]' do
   command 'curl -L https://get.rvm.io | sudo bash -s stable'
-  creates "/usr/local/rvm"
+  creates "/usr/local/rvm/bin/rvm"
   cwd "/home/#{node[:gozer][:username]}"
   user node[:gozer][:username]
   group 'nopass'
