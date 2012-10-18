@@ -8,7 +8,7 @@ package 'openvpn'
   end
 end
 
-openvpns = Gozer.bag('gozer', 'openvpn', node[:gozer][:bag_secret])
+openvpns = gozer_bag('gozer', 'openvpn')
 
 openvpns.each do |name, data|
   directory "/home/#{node[:gozer][:username]}/vpns/openvpn/#{name}" do

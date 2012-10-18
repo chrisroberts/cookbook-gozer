@@ -1,6 +1,6 @@
 package 'irssi'
 
-irssi_config = Gozer.bag('gozer', 'irssi', node[:gozer][:bag_secret])
+irssi_config = gozer_bag('gozer', 'irssi')
 
 if(irssi_config)
   directory "/home/#{node[:gozer][:username]}/.irssi" do

@@ -21,7 +21,7 @@ end
 package 'finch'
 package 'pidgin-skype'
 
-skype_config = Gozer.bag('gozer', 'skype', node[:gozer][:bag_secret])
+skype_config = gozer_bag('gozer', 'skype')
 
 if(skype_config)
   directory "/home/#{node[:gozer][:username]}/.Skype" do
@@ -43,7 +43,7 @@ if(skype_config)
   end
 end
 
-purple_config = Gozer.bag('gozer', 'purple', node[:gozer][:bag_secret])
+purple_config = gozer_bag('gozer', 'purple')
 
 if(purple_config)
   directory "/home/#{node[:gozer][:username]}/.purple" do
