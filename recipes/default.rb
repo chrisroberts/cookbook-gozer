@@ -4,10 +4,10 @@ unless(node[:gozer][:encrypted_databags].empty?)
 end
 
 %w(
+  system
   sudoers
   home
   packages
-  system
   git
   vim
   irssi
@@ -17,6 +17,7 @@ end
   rvm
   firefox
   github
+  go
 ).each do |recipe_name|
   include_recipe "gozer::#{recipe_name}"
 end
