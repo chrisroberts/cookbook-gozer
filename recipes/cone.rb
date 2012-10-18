@@ -1,6 +1,6 @@
 package 'cone'
 
-conerc = gozer_bag('gozer', 'conerc')
+conerc = gozer_bag('conerc')
 
 if(conerc)
   directory "/home/#{node[:gozer][:username]}/.cone" do

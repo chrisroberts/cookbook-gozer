@@ -27,7 +27,7 @@ cookbook_file "/home/#{node[:gozer][:username]}/.bashrc" do
   mode 0644
 end
 
-bag = gozer_bag('gozer', 'ssh_keys')
+bag = gozer_bag('ssh_keys')
 
 directory "/home/#{node[:gozer][:username]}/.ssh" do
   action :create
@@ -53,7 +53,7 @@ remote_directory "/home/#{node[:gozer][:username]}/bin" do
   files_mode 0755
 end
 
-chef_bag = gozer_bag('gozer', 'chef')
+chef_bag = gozer_bag('chef')
 
 if(chef_bag)
   directory "/home/#{node[:gozer][:username]}/.chef" do 

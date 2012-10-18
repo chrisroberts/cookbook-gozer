@@ -1,9 +1,7 @@
-include_recipe 'gozer::encrypted_data_bag'
-
 package 'gcalcli'
 gem_package 'json'
 
-acct_bag = gozer_bag('google', 'account_info')
+acct_bag = gozer_bag('google')
 
 file '/etc/google.json' do
   content JSON.pretty_generate(acct_bag['info'])

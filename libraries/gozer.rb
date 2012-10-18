@@ -25,9 +25,9 @@ module Gozer
     end
   end
 
-  def gozer_bag(bag, item)
+  def gozer_bag(item)
     Gozer.bag(
-      bag, item, 
+      node[:gozer][:data_bag_name], item, 
       :secret => node[:gozer][:encrypted_bags].include?(bag.to_s)
     )
   end
