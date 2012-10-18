@@ -12,7 +12,7 @@ default[:gozer][:rvm][:gems] = %w(chef vagrant veewee knife-ec2 bundler)
 
 # Bag encryption (by default, we encrypte everything we are currently configuring)
 default[:gozer][:data_bag_name] = 'gozer'
-default[:gozer][:encrypted_bags] = %w(ssh_keys chef openvpn irssi account_info conerc skype purple)
+default[:gozer][:encrypted_bags] = %w(ssh_keys chef openvpn irssi account_info conerc skype purple google)
 
 default[:gozer][:vim][:bundles] = %w(
   git://github.com/altercation/vim-colors-solarized.git
