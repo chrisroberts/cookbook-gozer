@@ -1,4 +1,4 @@
-default[:gozer][:packages] = %w(tmux moc)
+default[:gozer][:packages] = %w(tmux moc wireshark)
 default[:gozer][:custom_packages] = '/opt/custom_packages'
 default[:gozer][:hostname] = 'gozer'
 default[:gozer][:username] = 'spox'
@@ -7,6 +7,7 @@ default[:gozer][:github][:accounts] = []
 default[:gozer][:github][:exclude] = {}
 default[:gozer][:github][:allow_forks] = {}
 default[:gozer][:projects][:git] = {}
+default[:gozer][:rvm][:gems] = %w(chef vagrant veewee knife-ec2 bundler)
 
 # Bag encryption
 default[:gozer][:encrypted_bags] = []
