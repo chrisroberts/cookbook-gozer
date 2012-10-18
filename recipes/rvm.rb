@@ -33,6 +33,24 @@ execute 'rvm[ruby-1.9.3]' do
   end
 end
 
-node[:gozer][:rvm][:gems].each do |gem_name|
-  gem_package gem_name
+ruby_block 'set gem path' do
+  block do
+    node[:gozer][:rvm][:gem_paths] = %x{/usr/local/rvm/bin/rvm list}.split("\n").map(&:split).flatten.find_all{|s|s.start_with?('ruby-')}.map{|s|"/usr/local/rvm/rubies/#{s}/bin/gem"}
+    Chef::Log.info "RVM based gem paths set: #{node[:gozer][:rvm][:gem_paths]}"
+  end
+  only_if do
+    node[:gozer][:rvm][:gem_paths] != %x{/usr/local/rvm/bin/rvm list}.split("\n").map(&:split).flatten.find_all{|s|s.start_with?('ruby-')}.map{|s|"/usr/local/rvm/rubies/#{s}/bin/gem"}
+  end
+end
+
+ruby_block 'install rvm gems' do
+  block do
+    node[:gozer][:rvm][:gem_paths].each do |gem_path|
+      node[:gozer][:rvm][:gems].each do |gem_name|
+        g_r = Chef::Resource::GemPackage.new(gem_name, run_context)
+        g_r.gem_binary gem_path
+        g_r.run_action(:install)
+      end
+    end
+  end
 end
