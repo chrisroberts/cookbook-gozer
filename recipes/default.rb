@@ -1,5 +1,5 @@
 # Only place data bag secret if we have any bags configured for it
-unless(node[:gozer][:encrypted_databags].empty?)
+unless(node[:gozer][:encrypted_bags].empty?)
   include_recipe 'gozer::encrypted_data_bag'
 end
 
