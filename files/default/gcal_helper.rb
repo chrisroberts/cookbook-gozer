@@ -24,13 +24,13 @@ case command
 when 'calendar'
   cal_cmd = "watch -n #{config['calendar']['interval'] || 3600} --color --no-title " <<
     "'gcalcli --user #{Shellwords.escape(config['user'])} " <<
-    "--pw #{Shellwords.escape(config['password'])} "<<
+    "--pw #{Shellwords.escape(config['password'])} --https "<<
     "--details calw #{config['calendar']['show_weeks'] || 1}'"
   system(cal_cmd)
 when 'agenda'
   ag_cmd = "watch -n #{config['agenda']['interval'] || 3600} --color --no-title " <<
     "'gcalcli --user #{Shellwords.escape(config['user'])} " <<
-    "--pw #{Shellwords.escape(config['password'])} "<<
+    "--pw #{Shellwords.escape(config['password'])} --https "<<
     "--details agenda `date +%m/%d/%Y` `date --date=\"next month\" +%m/%d/%Y`'"
   system(ag_cmd)
 else
