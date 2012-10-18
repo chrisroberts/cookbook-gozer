@@ -7,6 +7,10 @@ default[:gozer][:github][:accounts] = []
 default[:gozer][:github][:exclude] = {}
 default[:gozer][:github][:allow_forks] = {}
 default[:gozer][:projects][:git] = {}
+
+# Bag encryption
+default[:gozer][:encrypted_bags] = []
+
 default[:gozer][:vim][:bundles] = %w(
   git://github.com/altercation/vim-colors-solarized.git
   git://github.com/elixir-lang/vim-elixir.git
