@@ -7,3 +7,4 @@ version          "0.0.2"
 
 depends 'i3'
 depends 'ohai'
+depends 'apt'
