@@ -117,3 +117,10 @@ node[:gozer][:projects][:git].each do |k,v|
     end
   end
 end
+
+if(node[:gozer][:opscode][:user])
+  file '/etc/chef/opscode_user' do
+    content node[:gozer][:opscode][:user]
+    mode 0644
+  end
+end

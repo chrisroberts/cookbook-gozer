@@ -120,6 +120,10 @@ alias kcd='knife client delete'
 alias knd='knife node delete'
 alias kne='knife node edit'
 
+if [ -f /etc/chef/opscode_user ]; then
+  export OPSCODE_USER=`cat /etc/chef/opscode_user`
+fi
+
 function gpa {
   for remote in $(git remote -v | grep push | cut -f 1 -); do
     echo "-----> Pushing to $remote: $*"

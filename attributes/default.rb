@@ -11,6 +11,7 @@ default[:gozer][:github][:exclude] = {}
 default[:gozer][:github][:allow_forks] = {}
 default[:gozer][:projects][:git] = {}
 default[:gozer][:rvm][:gems] = %w(chef vagrant veewee knife-ec2 bundler)
+default[:gozer][:opscode][:user] = 'chrisroberts'
 
 # Bag encryption (by default, we encrypte everything we are currently configuring)
 default[:gozer][:data_bag_name] = 'gozer'
