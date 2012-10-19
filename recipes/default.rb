@@ -19,6 +19,7 @@ include_recipe 'gozer::home'  # always first
   firefox
   github
   google
+  virtualbox
   go
 ).each do |recipe_name|
   include_recipe "gozer::#{recipe_name}"
