@@ -64,7 +64,7 @@ Installs firefox and adds the default extensions that I use. Extensions
 are enabled globally for the firefox install. Related attributes:
 
 * `node[:gozer][:firefox][:extension_dir] = '/usr/lib/firefox-addons/extensions'`
-* `node[:gozer][:firefox][:addons] = {:ghostery => 'https://addon_url.xpi'}
+* `node[:gozer][:firefox][:addons] = {:ghostery => 'https://addon_url.xpi'}`
 
 By default the following addons are installed:
 
@@ -88,7 +88,7 @@ them in a Projects directory within the user's home. Related attributes:
 
 * `node[:gozer][:github][:accounts] = %w(chrisroberts spox)`
 * `node[:gozer][:github][:exclude][:chrisroberts] = %w(red_unicorn)`
-* `node[:gozer][:github][:allow_forks][:chrisroberts] = true
+* `node[:gozer][:github][:allow_forks][:chrisroberts] = true`
 
 NOTE: Important note that github interactions are currently unauthenticated. That means
 that only public repositories will be cloned.
@@ -134,6 +134,7 @@ Installs and loads configuration for irssi. Uses data bag for configuration:
   "id": "irssi",
   "content": "content_of_dot_irssi_config"
 }
+```
 
 ### Packages
 
