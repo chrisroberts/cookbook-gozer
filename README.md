@@ -216,7 +216,10 @@ used by the recipes are here.
 
 The known hosts for dealing with github
 
+### Backup
 
+Provides backup script for syncing home directory to disk. Uses disk UUID for
+identification when mounting
 
 * `node[:gozer][:backup][:uuid] = 'disk-uuid'`
 
