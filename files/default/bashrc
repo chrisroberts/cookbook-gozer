@@ -112,6 +112,14 @@ if [ -f /usr/local/rvm/bin/rvm ]; then
   rvm use 1.9.3
 fi
 
+# Add commonly used knife aliases
+alias kcu='knife cookbook upload'
+alias krff='knife role from file'
+alias kdbff='knife data bag from file'
+alias kcd='knife client delete'
+alias knd='knife node delete'
+alias kne='knife node edit'
+
 function gpa {
   for remote in $(git remote -v | grep push | cut -f 1 -); do
     echo "-----> Pushing to $remote: $*"
