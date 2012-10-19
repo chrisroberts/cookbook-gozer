@@ -117,10 +117,3 @@ node[:gozer][:projects][:git].each do |k,v|
     end
   end
 end
-
-file "/home/#{node[:gozer][:username]}/.xsession" do
-  owner node[:gozer][:username]
-  group node[:gozer][:username]
-  mode 0700
-  content "#!/bin/bash\n$HOME/bin/caps_to_esc.sh\n"
-end

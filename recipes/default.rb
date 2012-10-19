@@ -3,10 +3,11 @@ unless(node[:gozer][:encrypted_bags].empty?)
   include_recipe 'gozer::encrypted_data_bag'
 end
 
+include_recipe 'gozer::home'  # always first
+
 %w(
   system
   sudoers
-  home
   packages
   git
   vim
@@ -27,6 +28,8 @@ user 'ubuntu' do
   action :lock
 end
 
-node.set_unless[:i3][:home] = "/home/#{node[:gozer][:username]}"
-node.set_unless[:i3][:user] = node[:gozer][:username]
+node[:i3][:home] = "/home/#{node[:gozer][:username]}"
+node[:i3][:user] = node[:gozer][:username]
+node[:i3][:config][:execs] = ['~/bin/caps_to_esc.sh']
+
 include_recipe 'i3'
