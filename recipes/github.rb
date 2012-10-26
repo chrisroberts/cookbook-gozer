@@ -76,5 +76,7 @@ node[:gozer][:github][:accounts].each do |acct|
     end
   rescue OpenURI::HTTPError
     Chef::Log.warn 'Looks like github is being finicky. Will try again on next run!'
+  rescue => e
+    Chef::Log.warn "Error encountered connecting to github: #{e}"
   end
 end
