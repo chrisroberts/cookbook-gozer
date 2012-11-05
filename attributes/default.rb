@@ -1,4 +1,4 @@
-default[:gozer][:packages] = %w(tmux moc wireshark)
+default[:gozer][:packages] = %w(tmux moc wireshark chromium-browser)
 default[:gozer][:kill_packages] = %w(thunderbird)
 default[:gozer][:custom_packages] = '/opt/custom_packages'
 default[:gozer][:hostname] = 'gozer'
@@ -20,6 +20,14 @@ default[:gozer][:encrypted_bags] = %w(ssh_keys chef openvpn irssi account_info c
 default[:gozer][:vim][:bundles] = %w(
   git://github.com/altercation/vim-colors-solarized.git
   git://github.com/elixir-lang/vim-elixir.git
+)
+default[:gozer][:emacs][:marmalade_packages] = %w(
+  starter-kit
+  starter-kit-lisp
+  starter-kit-bindings
+  starter-kit-ruby
+  rvm
+  gist
 )
 default[:gozer][:backup][:uuid] = nil
 default[:gozer][:firefox][:extension_dir] = '/usr/lib/firefox-addons/extensions'
