@@ -21,6 +21,7 @@ include_recipe 'gozer::home'  # always first
   google
   virtualbox
   go
+  emacs
 ).each do |recipe_name|
   include_recipe "gozer::#{recipe_name}"
 end

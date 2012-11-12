@@ -21,6 +21,7 @@ default[:gozer][:vim][:bundles] = %w(
   git://github.com/altercation/vim-colors-solarized.git
   git://github.com/elixir-lang/vim-elixir.git
 )
+default[:gozer][:emacs][:package_name] = 'emacs24-nox'
 default[:gozer][:emacs][:marmalade_packages] = %w(
   starter-kit
   starter-kit-lisp

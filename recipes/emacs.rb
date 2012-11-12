@@ -1,4 +1,4 @@
-package 'emacs'
+package node[:gozer][:emacs][:package_name]
 
 directory "/home/#{node[:gozer][:username]}/.emacs.d" do
   owner node[:gozer][:username]
