@@ -189,6 +189,21 @@ Installs and configures vim. Adds some plugins.
 
 * `node[:gozer][:vim][:bundles] = %w(git://github.com/altercation/vim-colors-solarized.git)`
 
+### Emacs
+
+Installs and configures emacs. Adds some plugins. Default installation package
+is emacs24-nox which assumes ubuntu >= 12.10. Adds packages from marmalade.
+
+* `node[:gozer][:emacs][:package_name] = 'emacs24-nox'`
+* `default[:gozer][:emacs][:marmalade_packages] = %w(
+  starter-kit
+  starter-kit-lisp
+  starter-kit-bindings
+  starter-kit-ruby
+  rvm
+  gist
+)`
+
 ### Virtualbox
 
 Installs virtualbox and related packages
