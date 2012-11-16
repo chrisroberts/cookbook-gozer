@@ -1,4 +1,4 @@
-default[:gozer][:packages] = %w(tmux moc wireshark chromium-browser)
+default[:gozer][:packages] = %w(tmux moc wireshark chromium-browser rxvt-unicode-256color)
 default[:gozer][:kill_packages] = %w(thunderbird)
 default[:gozer][:custom_packages] = '/opt/custom_packages'
 default[:gozer][:hostname] = 'gozer'
