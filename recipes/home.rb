@@ -1,4 +1,5 @@
 chef_gem 'ruby-shadow'
+include_recipe 'gozer::git'
 
 user node[:gozer][:username] do
   home "/home/#{node[:gozer][:username]}"
