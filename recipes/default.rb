@@ -22,6 +22,7 @@ include_recipe 'gozer::home'  # always first
   virtualbox
   go
   emacs
+  openvpn
 ).each do |recipe_name|
   include_recipe "gozer::#{recipe_name}"
 end
