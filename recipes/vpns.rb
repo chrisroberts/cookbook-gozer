@@ -23,6 +23,13 @@ openvpns.each do |name, data|
       owner node[:gozer][:username]
       group node[:gozer][:username]
     end
+
+    execute "unpack #{filename}" do
+      command "tar -xvf #{filename}"
+      owner node[:gozer][:username]
+      group node[:gozer][:username]
+      cwd "/home/#{node[:gozer][:username]}/vpns/openvpn/#{name}"
+    end
   end
 end
 
