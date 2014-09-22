@@ -1,9 +1,10 @@
-node[:gozer][:packages].each do |pkg_name|
+
+node[:gozer][:console][:packages].each do |pkg_name|
   package pkg_name
 end
 
-node[:gozer][:kill_packages].each do |pkg_name|
+node[:gozer][:ui][:packages].each do |pkg_name|
   package pkg_name do
-    action :remove
+    only_if{ node[:gozer][:ui_enabled] }
   end
 end

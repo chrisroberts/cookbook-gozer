@@ -1,38 +1,47 @@
-# Only place data bag secret if we have any bags configured for it
-unless(node[:gozer][:encrypted_bags].empty?)
-  include_recipe 'gozer::encrypted_data_bag'
+# Load our configuration in from data bag(s)
+node.run_state[:gozer] = Mash.new(:config => Mash.new)
+
+search(:gozer, "id:*").each do |item|
+  if(item['cipher'])
+    item = Mash.new(
+      Chef::EncryptedDataBagItem.new(
+        item, Chef::EncryptedDataBagItem.load_secret
+      ).to_hash
+    )
+  else
+    item = Mash.new(item.to_hash)
+  end
+  node.run_state[:gozer][:config] = Chef::Mixin::DeepMerge.merge(
+    node.run_state[:gozer][:config], item
+  )
 end
 
-include_recipe 'gozer::home'  # always first
+include_recipe 'apt'
 
-%w(
-  system
-  sudoers
-  packages
-  git
-  vim
-  irssi
-  finch
-  cone
-  bash-it
-  rvm
-  firefox
-  github
-  google
-  virtualbox
-  go
-  emacs
-  openvpn
-).each do |recipe_name|
-  include_recipe "gozer::#{recipe_name}"
-end
+include_recipe 'gozer::home'
+include_recipe 'gozer::write_files'
 
+include_recipe 'gozer::system'
+include_recipe 'gozer::sudoers'
+include_recipe 'gozer::packages'
+include_recipe 'gozer::git'
+include_recipe 'gozer::rvm'
+
+include_recipe 'gozer::google'
+include_recipe 'gozer::virtualbox'
+include_recipe 'gozer::go'
+include_recipe 'gozer::virtualbox'
+include_recipe 'gozer::firefox'
+
+# Clean up the setup stuff
 user 'ubuntu' do
   action :lock
 end
 
-node[:i3][:home] = "/home/#{node[:gozer][:username]}"
-node[:i3][:user] = node[:gozer][:username]
-node[:i3][:config][:execs] = ['~/bin/caps_to_esc.sh']
+if(node[:gozer][:enable_ui])
+  node[:i3][:home] = "/home/#{node[:gozer][:username]}"
+  node[:i3][:user] = node[:gozer][:username]
+  node[:i3][:config][:execs] = ['~/bin/caps_to_esc.sh']
 
-include_recipe 'i3'
+  include_recipe 'i3'
+end

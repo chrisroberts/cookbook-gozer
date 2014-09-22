@@ -1,36 +1,72 @@
-default[:gozer][:packages] = %w(tmux moc wireshark chromium-browser rxvt-unicode-256color)
-default[:gozer][:kill_packages] = %w(thunderbird)
+default[:gozer][:enable_ui] = false
+
+default[:gozer][:console][:packages] = ['tmux', 'rxvt-unicode-256color', 'moc', 'openvpn', 'ssh', 'irssi']
+default[:gozer][:ui][:packages] = [
+  'wireshark', 'firefox', 'chromium-browser', 'chromium-codecs-ffmpeg-extra',
+  'flashplugin-installer', 'xvnc4viewer', 'xmonad', 'cabal-install', 'qingy'
+]
+
+default[:gozer][:kill_packages] = ['thunderbird']
 default[:gozer][:custom_packages] = '/opt/custom_packages'
 default[:gozer][:hostname] = 'gozer'
 default[:gozer][:username] = 'spox'
-default[:gozer][:skype_package] = 'http://download.skype.com/linux/skype-ubuntu_4.0.0.8-1_amd64.deb'
-default[:gozer][:git][:name] = 'John Doe'
-default[:gozer][:git][:email] = 'john.doe@example.com'
+default[:gozer][:groups] = [
+  'adm', 'dialout', 'cdrom', 'plugdev', 'lpadmin',
+  'admin', 'sambashare', 'nopass'
+]
+
+default[:gozer][:bash_it][:aliases] = [
+  'bundler.aliases.bash', 'general.aliases.bash', 'git.aliases.bash',
+  'todo.txt-cli.aliases.bash'
+]
+default[:gozer][:bash_it][:completion] = [
+  'defaults.completion.bash', 'gem.completion.bash', 'git.completion.bash',
+  'ssh.completion.bash', 'tmux.completion.bash', 'todo.completion.bash'
+]
+default[:gozer][:bash_it][:plugins] = [
+  'base.plugin.bash', 'browser.plugin.bash', 'extract.plugin.bash',
+  'ruby.plugin.bash', 'ssh.plugin.bash', 'todo.plugin.bash', 'z.plugin.bash',
+  'battery.plugin.bash', 'dirs.plugin.bash', 'git.plugin.bash', 'rvm.plugin.bash',
+  'tmux.plugin.bash', 'vagrant.plugin.bash'
+]
+
+default[:gozer][:mount][:path] = '/srv/store'
+default[:gozer][:mount][:credentials] = '/etc/mount-creds'
+default[:gozer][:mount][:host] = 'databucket'
+default[:gozer][:mount][:share] = '/homes/spox'
+default[:gozer][:mount][:link] = '/home/spox/Data'
+
+default[:gozer][:rvm][:packages] = [
+  'build-essential', 'openssl', 'libreadline6', 'libreadline6-dev', 'curl', 'git-core',
+  'zlib1g', 'zlib1g-dev', 'libssl-dev', 'libyaml-dev', 'libsqlite3-dev', 'sqlite3', 'libxml2-dev',
+  'libxslt-dev', 'autoconf', 'libc6-dev', 'ncurses-dev', 'automake', 'libtool', 'bison', 'subversion',
+  'curl', 'g++', 'openjdk-6-jre-headless', 'pkg-config', 'libgdbm-dev', 'libffi-dev'
+]
+default[:gozer][:rvm][:versions] = [
+  '1.9.3',
+  '2.0.0',
+  '2.1.0'
+]
+
+default[:gozer][:git][:name] = 'Chris Roberts'
+default[:gozer][:git][:email] = 'code@chrisroberts.org'
 default[:gozer][:github][:accounts] = []
 default[:gozer][:github][:exclude] = {}
 default[:gozer][:github][:allow_forks] = {}
 default[:gozer][:projects][:git] = {}
-default[:gozer][:rvm][:gems] = %w(chef vagrant veewee knife-ec2 bundler)
+default[:gozer][:rvm][:gems] = ['bundler', 'hub', 'pry', 'octokit', 'librarian-chef']
 default[:gozer][:opscode][:user] = 'chrisroberts'
 
-# Bag encryption (by default, we encrypte everything we are currently configuring)
+# Bag encryption (by default, we encrypt everything we are currently configuring)
 default[:gozer][:data_bag_name] = 'gozer'
-default[:gozer][:encrypted_bags] = %w(ssh_keys chef openvpn irssi account_info conerc skype purple google)
 
-default[:gozer][:vim][:bundles] = %w(
-  git://github.com/altercation/vim-colors-solarized.git
-  git://github.com/elixir-lang/vim-elixir.git
-)
 default[:gozer][:emacs][:package_name] = 'emacs24-nox'
-default[:gozer][:emacs][:marmalade_packages] = %w(
-  starter-kit
-  starter-kit-lisp
-  starter-kit-bindings
-  starter-kit-ruby
-  rvm
-  gist
-)
-default[:gozer][:backup][:uuid] = nil
+default[:gozer][:emacs][:melpa_packages] = [
+  'starter-kit', 'starter-kit-bindings', 'starter-kit-ruby',
+  'starter-kit-js', 'json-mode', 'flymake-json', 'flymake-ruby',
+  'rvm', 'gist', 'haml-mode'
+]
+
 default[:gozer][:firefox][:extension_dir] = '/usr/lib/firefox-addons/extensions'
 default[:gozer][:firefox][:addons] = {
   :ghostery => 'https://addons.mozilla.org/firefox/downloads/latest/9609/addon-9609-latest.xpi?src=hp-dl-featured',

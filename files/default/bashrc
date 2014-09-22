@@ -44,12 +44,12 @@ esac
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
@@ -109,7 +109,7 @@ fi
 export PATH=$PATH:/usr/local/rvm/bin # Add RVM to PATH for scripting
 
 if [ -f /usr/local/rvm/bin/rvm ]; then
-  rvm use 1.9.3
+  rvm use 2.1.2
 fi
 
 # Add commonly used knife aliases
@@ -119,6 +119,20 @@ alias kdbff='knife data bag from file'
 alias kcd='knife client delete'
 alias knd='knife node delete'
 alias kne='knife node edit'
+alias ks='knife search'
+alias kns='knife node show'
+alias keff='knife environment from file'
+alias kes='knife environment show'
+
+alias vi='vim'
+alias em='emacs'
+
+alias bev='bundle exec vagabond'
+
+alias li='librarian-chef install'
+alias lu='librarian-chef update'
+
+export rvmsudo_secure_path=1
 
 if [ -f /etc/chef/opscode_user ]; then
   export OPSCODE_USER=`cat /etc/chef/opscode_user`
@@ -127,6 +141,108 @@ fi
 function gpa {
   for remote in $(git remote -v | grep push | cut -f 1 -); do
     echo "-----> Pushing to $remote: $*"
-    git push $remote $* 
+    git push $remote $*
   done
 }
+
+function vfd {
+  echo "Full vagrant and chef destroy of ${1}"
+  vagrant destroy -f $1
+  knife node delete -y $1.chrisroberts
+  knife client delete -y $1.chrisroberts
+}
+
+if [ ! -f ~/.ssh-agent-info ]; then
+  ssh-agent > ~/.ssh-agent-info
+  source ~/.ssh-agent-info
+  ssh-add ~/.ssh/id_rsa.work
+else
+  source ~/.ssh-agent-info
+fi
+
+function ws_crypt {
+    echo -e -n "${echo_bold_white}Data bag item encryption:${echo_reset_color} "
+    if [[ $CHEF_ENCRYPTED = 'ON' ]]
+    then
+        sed -i "s/export CHEF_ENCRYPTED=.*/export CHEF_ENCRYPTED=OFF/" $(direnv_rc)
+        echo -e -n "${echo_red}disabled"
+    else
+        sed -i "s/export CHEF_ENCRYPTED=.*/export CHEF_ENCRYPTED=ON/" $(direnv_rc)
+        echo -e -n "${echo_green}enabled"
+    fi
+    echo -e "${echo_reset_color}"
+    direnv_fload
+}
+
+function ws_acct {
+    ACCT=${1:sandbox}
+    echo -e "${echo_bold_white}Account change to:${echo_reset_color} ${echo_purple}${ACCT}${echo_reset_color}"
+    sed -i "s/export PROVIDER_ACCOUNT=.*/export PROVIDER_ACCOUNT=${ACCT}/" $(direnv_rc)
+    direnv_fload
+}
+
+function ws_region {
+    REGION=${1:ord}
+    echo -e "${echo_bold_white}Region change to:${echo_reset_color} ${echo_purple}${REGION}${echo_reset_color}"
+    sed -i "s/export PROVIDER_REGION=.*/export PROVIDER_REGION=${REGION}/" $(direnv_rc)
+    direnv_fload
+}
+
+function direnv_rc {
+    direnv status | grep "Found RC path" | cut -d ' ' -f 4
+}
+
+function direnv_fload {
+    direnv allow
+    direnv reload
+}
+
+function current_acct {
+    echo $PROVIDER_ACCOUNT
+}
+
+function current_region {
+    echo $PROVIDER_REGION
+}
+
+export MUXER_HOST="croberts@muxer.hw-ops.com"
+
+function workspace_current_acct {
+    if [[ $PROVIDER_ACCOUNT != '' ]]
+    then
+        echo -e "[${yellow}$(current_acct)${orange}:${yellow}$(current_region)${orange}] "
+    fi
+}
+
+function workspace_encrypted_dbi {
+    if [[ $CHEF_ENCRYPTED != '' ]]
+    then
+        if [[ $CHEF_ENCRYPTED = 'ON' ]]
+        then
+            echo -e "${red}{x} "
+        else
+            echo -e "${cyan}{-} "
+        fi
+    fi
+}
+
+function direnv-init {
+    if [ -f .envrc ]
+    then
+        echo -e "${echo_bold_red}ERROR:${echo_reset_color} Will not overwrite existing file!"
+    else
+        echo "export PROVIDER_ACCOUNT=\"\"" > .envrc
+        echo "export PROVIDER_REGION=\"\"" >> .envrc
+        echo "export CHEF_ENCRYPTED=\"\"" >> .envrc
+        echo "Initialized direnv!"
+        direnv allow
+    fi
+}
+
+eval "$(direnv hook bash)"
+
+function custom_prompt_command {
+    PS1="\n${yellow}$(ruby_version_prompt) ${purple}\h ${reset_color}in ${green}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${orange}$(workspace_current_acct)${red}$(workspace_encrypted_dbi)${green}→${reset_color} "
+}
+
+PROMPT_COMMAND="_direnv_hook;custom_prompt_command";

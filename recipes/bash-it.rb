@@ -1,3 +1,4 @@
+include_recipe 'gozer'
 include_recipe 'gozer::git'
 
 execute 'bash-it[install]' do
@@ -14,10 +15,7 @@ end
   end
 end
 
-%w(
-  bundler.aliases.bash general.aliases.bash git.aliases.bash 
-  todo.txt-cli.aliases.bash vim.aliases.bash
-).each do |als|
+node[:gozer][:bash_it].fetch(:aliases, []).each do |als|
   link "/home/#{node[:gozer][:username]}/.bash_it/aliases/enabled/#{als}" do
     to "/home/#{node[:gozer][:username]}/.bash_it/aliases/available/#{als}"
     owner node[:gozer][:username]
@@ -25,10 +23,7 @@ end
   end
 end
 
-%w(
-  defaults.completion.bash gem.completion.bash git.completion.bash 
-  ssh.completion.bash tmux.completion.bash todo.completion.bash
-).each do |comp|
+node[:gozer][:bash_it].fetch(:completion, []).each do |comp|
   link "/home/#{node[:gozer][:username]}/.bash_it/completion/enabled/#{comp}" do
     to "/home/#{node[:gozer][:username]}/.bash_it/completion/available/#{comp}"
     owner node[:gozer][:username]
@@ -36,12 +31,7 @@ end
   end
 end
 
-%w(
-  base.plugin.bash browser.plugin.bash extract.plugin.bash 
-  ruby.plugin.bash ssh.plugin.bash todo.plugin.bash z.plugin.bash
-  battery.plugin.bash dirs.plugin.bash git.plugin.bash rvm.plugin.bash 
-  tmux.plugin.bash vagrant.plugin.bash
-).each do |plug|
+node[:gozer][:bash_it].fetch(:plugins, []).each do |plug|
   link "/home/#{node[:gozer][:username]}/.bash_it/plugins/enabled/#{plug}" do
     to "/home/#{node[:gozer][:username]}/.bash_it/plugins/available/#{plug}"
     owner node[:gozer][:username]

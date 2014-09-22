@@ -39,7 +39,7 @@ export TODO="t"
 # https://github.com/xvzf/vcprompt
 #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
 
-source ~/.bashrc
-
 # Load Bash It
 source $BASH_IT/bash_it.sh
+
+source ~/.bashrc

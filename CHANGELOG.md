@@ -1,3 +1,9 @@
+## v0.1.0
+* Updates to latest snowflake
+* Makes UI specific stuff optional
+* Removes things no longer used (like vim)
+* Most config files are data bag stored and auto processed
+
 ## v0.0.4
 * Adds moar stuffs
 * New emacs recipe. Based on emacs 24, so ubuntu 12.10 required or updated repo
