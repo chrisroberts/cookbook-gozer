@@ -6,7 +6,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar my-packages '(<%= node[:gozer][:emacs][:marmalade_packages].join(' ') %>)
+(defvar my-packages '(<%= node[:gozer][:emacs][:melpa_packages].join(' ') %>)
   "Packages to be installed at launch")
 
 (dolist (p my-packages)

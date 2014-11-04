@@ -3,7 +3,7 @@ default[:gozer][:enable_ui] = false
 default[:gozer][:console][:packages] = ['tmux', 'rxvt-unicode-256color', 'moc', 'openvpn', 'ssh', 'irssi']
 default[:gozer][:ui][:packages] = [
   'wireshark', 'firefox', 'chromium-browser', 'chromium-codecs-ffmpeg-extra',
-  'flashplugin-installer', 'xvnc4viewer', 'xmonad', 'cabal-install', 'qingy'
+  'flashplugin-installer', 'xvnc4viewer', 'qingy'
 ]
 
 default[:gozer][:kill_packages] = ['thunderbird']
@@ -40,12 +40,13 @@ default[:gozer][:rvm][:packages] = [
   'build-essential', 'openssl', 'libreadline6', 'libreadline6-dev', 'curl', 'git-core',
   'zlib1g', 'zlib1g-dev', 'libssl-dev', 'libyaml-dev', 'libsqlite3-dev', 'sqlite3', 'libxml2-dev',
   'libxslt-dev', 'autoconf', 'libc6-dev', 'ncurses-dev', 'automake', 'libtool', 'bison', 'subversion',
-  'curl', 'g++', 'openjdk-6-jre-headless', 'pkg-config', 'libgdbm-dev', 'libffi-dev'
+  'curl', 'g++', 'openjdk-6-jre-headless', 'pkg-config', 'libgdbm-dev', 'libffi-dev', 'gawk'
 ]
 default[:gozer][:rvm][:versions] = [
   '1.9.3',
   '2.0.0',
-  '2.1.0'
+  '2.1.0',
+  '2.1.2'
 ]
 
 default[:gozer][:git][:name] = 'Chris Roberts'
@@ -67,14 +68,26 @@ default[:gozer][:emacs][:melpa_packages] = [
   'rvm', 'gist', 'haml-mode'
 ]
 
+default[:gozer][:wemux][:config] = {
+  :host_list => ['spox'],
+  :allow_pair_mode => true,
+  :allow_rouge_mode => true,
+  :default_client_mode => 'pair',
+  :allow_server_change => true,
+  :default_server_name => 'gozer'
+}
+
 default[:gozer][:firefox][:extension_dir] = '/usr/lib/firefox-addons/extensions'
 default[:gozer][:firefox][:addons] = {
-  :ghostery => 'https://addons.mozilla.org/firefox/downloads/latest/9609/addon-9609-latest.xpi?src=hp-dl-featured',
-  :adblock => 'https://addons.mozilla.org/firefox/downloads/latest/1865/addon-1865-latest.xpi?src=ss',
-  :flashblock => 'https://addons.mozilla.org/firefox/downloads/latest/433/addon-433-latest.xpi?src=search',
-  :noscript => 'https://addons.mozilla.org/firefox/downloads/latest/722/addon-722-latest.xpi?src=dp-btn-primary'
+  :ghostery => 'https://addons.mozilla.org/firefox/downloads/latest/9609/addon-9609-latest.xpi',
+  :adblock => 'https://addons.mozilla.org/firefox/downloads/latest/1865/addon-1865-latest.xpi',
+  :flashblock => 'https://addons.mozilla.org/firefox/downloads/latest/433/addon-433-latest.xpi',
+  :noscript => 'https://addons.mozilla.org/firefox/downloads/latest/722/addon-722-latest.xpi'
 }
 default[:gozer][:github][:known_hosts] = [
   '|1|CACPIcyGzkYAImUrj0r0XLf79As=|rAVQh4J0mo/UyusXg32ENK2RCqM= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==',
   '|1|nJOphBvYrw4FNMk75shRidnVAlw=|BuG7amvSzq8fnAvYFGubFSzB024= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=='
 ]
+
+default[:gozer][:tmux]
+default[:gozer][:xmonad][:cabals] = []

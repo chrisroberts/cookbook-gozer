@@ -1,0 +1,215 @@
+-- xmonad.hs
+-- XMonad config file - sean.escriva@gmail.com
+--
+import XMonad
+-- Hooks
+import XMonad.Hooks.UrgencyHook (withUrgencyHook, NoUrgencyHook(..), focusUrgent)
+import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts(..))
+import XMonad.Hooks.ManageHelpers (isFullscreen, isDialog, doFullFloat, doCenterFloat)
+import XMonad.Hooks.SetWMName
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.DynamicLog
+-- Taffybar
+import DBus.Client
+import System.Taffybar.XMonadLog
+-- Actions
+import XMonad.Actions.CycleWS (nextScreen, prevScreen, shiftNextScreen, shiftPrevScreen, nextWS, prevWS, toggleWS, Direction1D(..), WSType(..), findWorkspace)
+import XMonad.Actions.WindowGo (title, raiseMaybe, runOrRaise) --, (=?))
+import XMonad.Actions.UpdatePointer
+-- Utils
+import XMonad.Util.Run (safeSpawn, unsafeSpawn, runInTerm, spawnPipe)
+import XMonad.Util.EZConfig hiding (additionalMouseBindings, removeMouseBindings)
+import XMonad.Util.Scratchpad (scratchpadSpawnAction, scratchpadManageHook, scratchpadFilterOutWorkspace)
+import XMonad.Util.WorkspaceCompare (getSortByIndex)
+-- Layouts
+import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.ResizableTile (ResizableTall(..))
+import XMonad.Layout.Grid (Grid(..))
+import XMonad.Layout.Magnifier (magnifiercz)
+import XMonad.Layout.PerWorkspace (onWorkspace)
+import XMonad.Layout.IM
+import XMonad.Layout.Reflect (reflectHoriz)
+import XMonad.Layout.Named
+
+-- Prompt
+-- import XMonad.Prompt
+
+import System.IO (hPutStrLn)
+import Data.Char (isSpace)
+import qualified XMonad.StackSet as W
+
+-- import Graphics.X11.ExtraTypes.XF86
+
+-- basic colors
+cyan = "#00a0df"
+
+-- Color names are easier to remember:
+colorOrange          = "#ff7701"
+colorDarkGray        = "#171717"
+colorPink            = "#e3008d"
+colorGreen           = "#00aa4a"
+colorBlue            = "#008dd5"
+colorYellow          = "#efad3f"
+colorWhite           = "#cfbfad"
+colorRed             = "#b61819"
+colorPurple          = "#9C3378"
+
+-- zenburn
+zbBackground         = "#3f3f3f"
+zbForeground         = "#dcdccc"
+zbBlack              = "#1E2320"
+zbRed                = "#705050"
+zbGreen              = "#60b48a"
+zbYellow             = "#dfaf8f"
+zbBlue               = "#506070"
+zbPurple             = "#dc8cc3"
+zbCyan               = "#8cd0d3"
+zbWhite              = "#dcdccc"
+zbBrightBack         = "#709080"
+zbBrightRed          = "#dca3a3"
+zbBrightGreen        = "#c3bf9f"
+zbBrightYellow       = "#f0dfaf"
+zbBrightBlue         = "#94bff3"
+zbBrightPurple       = "#ec93d3"
+zbBrightCyan         = "#93e0e3"
+zbBrightWhite        = "#ffffff"
+
+-- Solarized Dark
+sdBackground         = "#002b36"
+sdForeground         = "#657b83"
+sdBlack              = "#073642"
+sdRed                = "#dc322f"
+sdGreen              = "#859900"
+sdYellow             = "#b58900"
+sdBlue               = "#268bd2"
+sdMagenta            = "#d33682"
+sdCyan               = "#2aa198"
+sdWhite              = "#eee8d5"
+sdBrightBlack        = "#002b36"
+sdBrightRed          = "#cb4b16"
+sdBrightGreen        = "#586e75"
+sdBrightYellow       = "#657b83"
+sdBrightBlue         = "#839496"
+sdBrightMagenta      = "#6c71c4"
+sdBrightCyan         = "#93a1a1"
+sdBrightWhite        = "#fdf6e3"
+
+colorNormalBorder    = sdGreen
+colorFocusedBorder   = sdBrightGreen
+
+colorBG              = tnBackground
+colorFG              = tnWhite
+
+tnBackground         = "#1d1f21"
+tnBrightBlue         = "#81a2be"
+tnBrightRed          = "#cc6666"
+tnYellow             = "#ae7b00"
+tnWhite              = "#929593"
+
+-- fonts
+barFont  = "terminus"
+barXFont = "inconsolata:size=14"
+xftFont  = "xft: inconsolata-14"
+
+mTerm    = "urxvtc"
+
+smeBarPP = defaultPP
+                { ppCurrent = taffybarColor tnBrightRed colorBG . wrap "" ""
+                , ppVisible = taffybarColor tnBrightBlue colorBG . wrap "" ""
+                , ppSep     = taffybarColor colorFG colorBG " | "
+                , ppUrgent  = taffybarColor colorBG tnYellow . wrap "[" "]"
+                , ppTitle   = taffybarColor colorFG "" . trim
+                }
+
+standardLayouts = Mirror tiled |||
+                  defaultTall  |||
+                  Full
+                where
+                  tiled         = Tall nmaster delta ratio
+                  defaultTall   = ResizableTall 1 (3/100) (1/2) []
+                  nmaster       = 1
+                  ratio         = toRational (2/(1 + sqrt 5 :: Double)) -- golden ratio
+                  delta         = 0.03
+
+-- grids = magnifiercz 1.2 (GridRatio (4/3)) |||
+--         GridRatio (4/3)
+
+gimp     = reflectHoriz $ 
+           named "Gimp" $ 
+           withIM (11/64) (Role "gimp-toolbox") $ 
+           ResizableTall 2 (1/118) (11/20) [5/4,5/4,5/4]
+
+smeKeys :: [([Char], X ())]
+smeKeys =
+    [ ("M-p"        , safeSpawn "yeganesh_run" [] )
+    , ("M-g"        , runOrRaise "chromium"   (className =? "Chromium" <&&> stringProperty "WM_WINDOW_ROLE" =? "browser"))
+    , ("M-f"        , runOrRaise "conkeror"   (className =? "Conkeror"))
+    , ("M-s"        , runOrRaise "skype"      (className =? "Skype"))
+    , ("M-r"        , raiseMaybe (safeSpawn "chromium" ["--app=http://www.rdio.com"]) (appName =? "www.rdio.com"))
+    , ("M-S-l"        , unsafeSpawn "i3lock -c 1d1f21" )
+    -- , ("M-w"        , goToSelected defaultGSConfig)
+    , ("M-`"    , focusUrgent)
+    , ("M-i"    , raiseMaybe (runInTerm "-title irssi" "sh -c 'tmux new -A -s irc irssi'") (title =? "irssi"))
+    , ("M-b"    , sendMessage ToggleStruts)
+    -- move window to and focus NonEmpty wss except scratchpad
+    , ("M-C-s"    , shiftAndView Next)
+    , ("M-C-d"    , shiftAndView Prev)
+    , ("M-S-n"      , nextWS)
+    , ("M-S-p"      , prevWS)
+    , ("M-S-f"    , shiftNextScreen)
+    , ("M-S-a"    , shiftPrevScreen)
+    -- , ("M-<Tab>"  , toggleWS)
+    , ("M--"      , toggleWS)
+    -- Media keys
+    , ("<XF86AudioLowerVolume>" , unsafeSpawn "amixer -q set Master 10%-"  )
+    , ("<XF86AudioMute>"        , unsafeSpawn "amixer -q set Master toggle")
+    , ("<XF86AudioRaiseVolume>" , unsafeSpawn "amixer -q set Master 10%+"  )
+    -- Screenshot
+    , ("<XF86LaunchA>" , unsafeSpawn "scrot '%Y-%m-%d-%H%M_$wx$h.png' -e 'mv $f ~/screenshots/'")
+    , ("<XF86LaunchB>" , unsafeSpawn "scrot '%Y-%m-%d-%H%M_$wx$h.png' -e '/usr/bin/imgurbash $f'")
+    , ("<XF86MonBrightnessUp>", unsafeSpawn "xbacklight -inc 5")
+    , ("<XF86MonBrightnessDown>", unsafeSpawn "xbacklight -dec 5")
+    , ("<XF86KbdBrightnessUp>", unsafeSpawn "xbacklight -dec 5")
+    , ("<XF86KbdBrightnessDown>", unsafeSpawn "xbacklight -dec 5")
+    -- Audio
+    , ("<XF86AudioPlay>", unsafeSpawn "~/bin/rdio-xdotool.sh playpause")
+    , ("<XF86AudioPrev>", unsafeSpawn "~/bin/rdio-xdotool.sh previous")
+    , ("<XF86AudioNext>", unsafeSpawn "~/bin/rdio-xdotool.sh next")
+    ]
+    where -- | non-empty workspaces less scratchpad
+        shiftAndView dir = findWorkspace getSortByIndexNoSP dir NonEmptyWS 1
+                >>= \t -> (windows . W.shift $ t) >> (windows . W.greedyView $ t)
+        getSortByIndexNoSP =
+                fmap (.scratchpadFilterOutWorkspace) getSortByIndex
+
+smeManageHook :: ManageHook
+smeManageHook = composeAll
+              [ resource  =? "desktop_window" --> doIgnore
+              , className =? "MPlayer" --> doFloat
+              , isFullscreen           --> doFullFloat
+              , isDialog               --> doCenterFloat
+              , className =? "Conkeror" --> doShift "2"
+              , stringProperty "WM_WINDOW_ROLE" =? "browser" --> doShift "2"
+              ] <+> manageDocks
+
+smeConfig = defaultConfig
+       { terminal = mTerm
+       , focusFollowsMouse      = False
+       , modMask                = mod4Mask -- command key
+       , focusedBorderColor     = cyan
+       , layoutHook             = avoidStruts $
+                                  smartBorders (
+                                               onWorkspace "5" gimp standardLayouts
+                                               )
+       , manageHook             = smeManageHook
+       -- , mouseBindings          = smeMouseBindings
+       }
+       `additionalKeysP` smeKeys
+
+strutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
+
+-- Main
+main = do
+  client <- connectSession
+  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh smeConfig { logHook = dbusLogWithPP client smeBarPP }
+

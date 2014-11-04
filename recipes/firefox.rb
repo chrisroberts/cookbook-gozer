@@ -7,7 +7,9 @@ directory node[:gozer][:custom_packages] do
 end
 
 node[:gozer][:firefox][:addons].each do |name, location|
+
   xpi_path = File.join(node[:gozer][:custom_packages], "#{name}.xpi")
+
   remote_file xpi_path do
     source location
     mode 0644
@@ -28,7 +30,7 @@ node[:gozer][:firefox][:addons].each do |name, location|
         id = doc.elements.collect('RDF/Description/em:id'){|i|i.text}.first
         if(id)
           ext_path = File.join(node[:gozer][:firefox][:extension_dir], id)
-          Dir.mkdir(ext_path)
+          FileUtils.mkdir_p(ext_path)
           raise 'Failed to unzip' unless system("unzip #{name}.xpi -d #{ext_path} 2>1 > /dev/null")
         else
           raise "Failed to determine extension ID for installation: #{name}"

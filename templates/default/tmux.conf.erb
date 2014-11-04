@@ -1,0 +1,22 @@
+set -g prefix C-<%= node[:gozer][:enable_ui] ? 'h' : 'j' %>
+unbind C-b
+bind C-<%= node[:gozer][:enable_ui] ? 'h' : 'j' %> send-prefix
+
+set-option -g status on
+set-option -g status-interval 2
+set-option -g status-utf8 on
+set-option -g status-justify "centre"
+set-option -g status-left-length 60
+set-option -g status-right-length 90
+set-option -g status-left "#(/opt/tmux-powerline/powerline.sh left)"
+set-option -g status-right "#(/opt/tmux-powerline/powerline.sh right)"
+
+set-option -g status-bg yellow
+set-option -g pane-border-fg blue
+set-option -g pane-active-border-fg red
+
+set-window-option -g allow-rename off
+set-window-option -g automatic-rename off
+
+bind-key H set-option status off
+bind-key S set-option status on

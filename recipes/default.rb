@@ -26,12 +26,17 @@ include_recipe 'gozer::sudoers'
 include_recipe 'gozer::packages'
 include_recipe 'gozer::git'
 include_recipe 'gozer::rvm'
-
+include_recipe 'gozer::emacs'
 include_recipe 'gozer::google'
 include_recipe 'gozer::virtualbox'
 include_recipe 'gozer::go'
 include_recipe 'gozer::virtualbox'
-include_recipe 'gozer::firefox'
+include_recipe 'gozer::direnv'
+include_recipe 'gozer::bash-it'
+include_recipe 'gozer::powerline'
+include_recipe 'gozer::mount'
+include_recipe 'gozer::tmux'
+include_recipe 'gozer::wemux'
 
 # Clean up the setup stuff
 user 'ubuntu' do
@@ -39,9 +44,11 @@ user 'ubuntu' do
 end
 
 if(node[:gozer][:enable_ui])
-  node[:i3][:home] = "/home/#{node[:gozer][:username]}"
-  node[:i3][:user] = node[:gozer][:username]
-  node[:i3][:config][:execs] = ['~/bin/caps_to_esc.sh']
+  node.set[:i3][:home] = "/home/#{node[:gozer][:username]}"
+  node.set[:i3][:user] = node[:gozer][:username]
+  node.set[:i3][:config][:execs] = ['~/bin/caps_to_esc.sh']
 
+  include_recipe 'gozer::firefox'
+  include_recipe 'gozer::xmonad'
   include_recipe 'i3'
 end

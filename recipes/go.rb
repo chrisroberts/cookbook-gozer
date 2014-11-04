@@ -1,10 +1,6 @@
 include_recipe 'apt'
 
-execute 'add go ppa repo' do
-  command 'add-apt-repository -y ppa:gophers/go'
-  not_if 'apt-cache policy | grep gophers'
-  notifies :run, resources(:execute => 'apt-get update'), :immediately
+package 'golang' do
+  action :install
+  subscribes :upgrade, 'execute[apt-get update]'
 end
-
-package 'golang-weekly'
-

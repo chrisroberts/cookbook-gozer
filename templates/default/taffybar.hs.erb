@@ -1,0 +1,53 @@
+import System.Taffybar
+import System.Taffybar.Systray
+import System.Taffybar.XMonadLog
+import System.Taffybar.Battery
+import System.Taffybar.SimpleClock
+import System.Taffybar.DiskIOMonitor
+import System.Taffybar.Widgets.PollingGraph
+import System.Taffybar.Widgets.PollingBar
+import System.Information.CPU
+import System.Information.Memory
+import System.Information.Battery
+--import System.Information.DiskIO
+
+cpuCallback = do
+  (_, systemLoad, totalLoad) <- cpuLoad
+  return [ totalLoad, systemLoad ]
+
+memCallback = do
+  mi <- parseMeminfo
+  return [memoryUsedRatio mi]
+
+batCfg :: BarConfig
+batCfg =
+  defaultBarConfig colorFunc
+  where
+    colorFunc pct -- need to make solarized
+      | pct < 0.1 = (0.5, 0.5, 0.55) -- bright red
+      | pct < 0.9 = (0.45, -0.7, 0.7) -- green
+      | otherwise = (0, 1, 0) -- grey
+      
+-- colors: tomorrow night
+main = do
+  let cpuCfg = defaultGraphConfig { graphDataColors = [ (0.7, 0.74, 0.4, 1), (1, 0, 1, 0.5)] -- brightgreen
+                                  , graphLabel = Just "cpu"
+                                  }
+      memCfg = defaultGraphConfig { graphDataColors = [(0.8, 0.4, 0.4, 1)] -- brightred
+                                  , graphLabel = Just "mem"
+                                  }
+      dskCfg = defaultGraphConfig { graphDataColors = [(0.5, 0.63, 0.74, 1)] -- brightblue
+                                  , graphLabel = Just "sda"
+                                  }
+
+      clock = textClockNew Nothing "<span fgcolor='#81a2be'>%a %b %_d %H:%M</span>" 1
+      log = xmonadLogNew
+      tray = systrayNew
+      mem = pollingGraphNew memCfg 1 memCallback
+      cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
+      disk = dioMonitorNew dskCfg 1 "sda"
+      bat = textBatteryNew "%d%%" 1 -- batteryBarNew defaultBatteryConfig 1
+  defaultTaffybar defaultTaffybarConfig { startWidgets = [ log ]
+                                        , endWidgets = [ tray, clock, disk, mem, cpu ]
+                                        }
+
