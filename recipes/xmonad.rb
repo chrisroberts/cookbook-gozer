@@ -60,7 +60,7 @@ ruby_block 'enable pulse audio dbus support' do
   block do
     content = File.readlines('/etc/pulse/default.pa').map(&:strip)
     content << 'load-module module-dbus-protocol'
-    File.write('/etc/pulse/default.pa', 'w+') do |file|
+    File.open('/etc/pulse/default.pa', 'w+') do |file|
       file.puts content.join("\n")
     end
   end
